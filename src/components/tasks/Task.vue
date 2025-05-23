@@ -27,7 +27,10 @@
             </div>
             <!-- <div class="task-date">24 Feb 12:00</div> -->
         </div>
-        <TaskActions @edit="isEdit = true" v-show="!isEdit" />
+        <TaskActions 
+            @edit="isEdit = true" v-show="!isEdit" 
+            @remove="removeTask"
+        />
     </li>
 </template>
 
@@ -36,12 +39,13 @@ import IconPencil from "../icons/iconPencil.vue";
 import IconTrash from "../icons/iconTrash.vue";
 import { computed, ref } from "vue";
 import TaskActions from "./TaskActions.vue";
+// import { removeTask } from "@/http/task-api";
 
 const props =defineProps({
     task: Object
 })
 
-const emit = defineEmits(['updated', 'completed']);
+const emit = defineEmits(['updated', 'completed', 'remove']);
 
 const isEdit = ref(false);
 const completedClass = computed(() => 
@@ -65,4 +69,10 @@ const markTaskAsCompleted = (event) => {
     };
     emit("completed", updatedTask);
 };
+
+const removeTask = () => {
+    if (confirm("Are you sure?")) {
+        emit("remove", props.task);
+    }
+}
 </script>
